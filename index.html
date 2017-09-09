@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <title>Document</title>
   <script src="./js/vue.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+  <!-- VueFire -->
+  <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+  <script src="https://unpkg.com/vue-toasted"></script>
   <style>
     body {
       background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);
@@ -47,7 +52,7 @@
     </form>
     <ul class="list-group">
       <transition-group name="list" tag="p">
-        <li v-for="todo in todos" :key="todo.id" class="list-group-item">
+        <li v-for="todo in todos" :key="todo['.key']" class="list-group-item">
           <span @click="toggleStatus(todo)" :class="{'inactive': !todo.status, 'active': todo.status}">
             {{ todo.title }}        
           </span>
@@ -58,12 +63,29 @@
     Active Todo: {{ active }} , Completed Todo: {{ actvcomplete }}
   </div>
   <script>
+    Vue.use(VueFire);
+    Vue.use(Toasted);
+    var config = {
+      apiKey: "AIzaSyDUEtmPi4BOYGNx-pvygM_UlZEqxmmwGhE",
+      authDomain: "simpletodo-6f1b8.firebaseapp.com",
+      databaseURL: "https://simpletodo-6f1b8.firebaseio.com",
+      projectId: "simpletodo-6f1b8",
+      storageBucket: "",
+      messagingSenderId: "838511658659"
+    };
+
+    var app = firebase.initializeApp(config)
+    var db = app.database()
+    var todoRef = db.ref('todos')
+
     new Vue({
       el: '#app',
       data: {
         todo_txt: '',
-        todos: [],
         id: 1,
+      },
+      firebase: {
+        todos: todoRef
       },
       computed: {
         active: function() {
@@ -81,19 +103,16 @@
       },
       methods: {
         addTodo: function() {
-          this.todos.push({
-            id: this.id,
+          todoRef.push({
             title: this.todo_txt,
             status: true
           });
           this.todo_txt = ''
-          this.id = this.id + 1;
+          this.$toasted.success('Todolist berhasil ditambah').goAway(1500)
         },
         hapusTodo: function(todo) {
-          var index = this.todos.findIndex(function(t){
-            return t.id == todo.id;
-          });
-          this.todos.splice(index, 1);
+          todoRef.child(todo['.key']).remove()
+          this.$toasted.success('Todolist berhasil dihapus').goAway(1500)
         },
         toggleStatus: function(todo) {
           var target = this.todos.find(function(t){
