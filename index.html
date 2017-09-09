@@ -12,6 +12,19 @@
       text-decoration: line-through;
       font-style: oblique;
     }
+    .active {
+      color:green;
+    }
+    .list-item {
+        margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+        transition: all 1s;
+    }
+    .list-enter, .list-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
   </style>
 </head>
 <body>
@@ -20,10 +33,14 @@
       <input type="text" v-model="todo_txt">
     </form>
     <ul>
-      <li v-for="todo in todos">        
-          {{ todo.title }}        
-        <button @click="hapusTodo(todo)">x</button>
-      </li>
+      <transition-group name="list" tag="p">
+        <li v-for="todo in todos" :key="todo.id" class="list-item">
+          <span @click="toggleStatus(todo)" :class="{'inactive': !todo.status, 'active': todo.status}">
+            {{ todo.title }}        
+          </span>
+          <button @click="hapusTodo(todo)">x</button>
+        </li>
+      </transition-group>
     </ul>
     Active Todo: {{ active }} , Completed Todo: {{ actvcomplete }}
   </div>
