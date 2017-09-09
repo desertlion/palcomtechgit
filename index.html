@@ -20,14 +20,11 @@
       <input type="text" v-model="todo_txt">
     </form>
     <ul>
-      <li v-for="todo in todos">
-        <span @click="toggleStatus(todo)" :class="{'inactive': !todo.status}">
-          {{ todo.title }}
-        </span>
+      <li v-for="todo in todos">        
+          {{ todo.title }}        
         <button @click="hapusTodo(todo)">x</button>
       </li>
     </ul>
-    Active Todo: {{ active }}
   </div>
   <script>
     new Vue({
@@ -36,15 +33,7 @@
         todo_txt: '',
         todos: [],
         id: 1,
-      },
-      computed: {
-        active: function() {
-          var activeTodos = this.todos.filter(function(todo) {
-            return todo.status
-          });
-          return activeTodos.length;
-        }
-      },
+      },      
       methods: {
         addTodo: function() {
           this.todos.push({
@@ -54,19 +43,7 @@
           });
           this.todo_txt = ''
           this.id = this.id + 1;
-        },
-        hapusTodo: function(todo) {
-          var index = this.todos.findIndex(function(t){
-            return t.id == todo.id;
-          });
-          this.todos.splice(index, 1);
-        },
-        toggleStatus: function(todo) {
-          var target = this.todos.find(function(t){
-            return t.id == todo.id
-          })
-          target.status = !target.status
-        }
+        }        
       }
     });
   </script>
