@@ -27,7 +27,7 @@
         <button @click="hapusTodo(todo)">x</button>
       </li>
     </ul>
-    Active Todo: {{ active }}
+    Active Todo: {{ active }} , Completed Todo: {{ actcomplete }}
   </div>
   <script>
     new Vue({
@@ -43,6 +43,12 @@
             return todo.status
           });
           return activeTodos.length;
+        },
+        actcomplete: function() {
+          var completeTodos = this.todos.filter(function(todo) {
+            return !todo.status
+          });
+          return completeTodos.length;
         }
       },
       methods: {
