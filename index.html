@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <script src="/js/vue.min.js"></script>
+  <script src="./js/vue.min.js"></script>
   <style>
     .inactive {
       color: grey;
@@ -27,7 +27,7 @@
         <button @click="hapusTodo(todo)">x</button>
       </li>
     </ul>
-    Active Todo: {{ active }} , Completed Todo: {{ actcomplete }}
+    Active Todo: {{ active }} , Completed Todo: {{ actvcomplete }}
   </div>
   <script>
     new Vue({
@@ -44,7 +44,7 @@
           });
           return activeTodos.length;
         },
-        actcomplete: function() {
+        actvcomplete: function() {
           var completeTodos = this.todos.filter(function(todo) {
             return !todo.status
           });
