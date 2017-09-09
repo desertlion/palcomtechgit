@@ -4,41 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <title>Document</title>
   <script src="./js/vue.min.js"></script>
   <style>
+    #app {
+      max-width: 50%;
+      margin: 30px auto;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 20px;
+      box-shadow: 0 5px 17px rgba(0,0,0,.3);
+    }
+    form {
+      margin-bottom: 15px;
+    }
     .inactive {
       color: grey;
       text-decoration: line-through;
       font-style: oblique;
     }
-    .active {
-      color:green;
-    }
     .list-item {
         margin-right: 10px;
     }
     .list-enter-active, .list-leave-active {
-        transition: all 1s;
+        transition: all .32s;
     }
     .list-enter, .list-leave-to {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(15px);
     }
   </style>
 </head>
 <body>
   <div id="app">
     <form @submit.prevent="addTodo">
-      <input type="text" v-model="todo_txt">
+      <input type="text" v-model="todo_txt" class="form-control">
     </form>
-    <ul>
+    <ul class="list-group">
       <transition-group name="list" tag="p">
-        <li v-for="todo in todos" :key="todo.id" class="list-item">
+        <li v-for="todo in todos" :key="todo.id" class="list-group-item">
           <span @click="toggleStatus(todo)" :class="{'inactive': !todo.status, 'active': todo.status}">
             {{ todo.title }}        
           </span>
-          <button @click="hapusTodo(todo)">x</button>
+          <span @click="hapusTodo(todo)" class="btn badge">x</span>
         </li>
       </transition-group>
     </ul>
@@ -75,7 +84,19 @@
           });
           this.todo_txt = ''
           this.id = this.id + 1;
-        }        
+        },
+        hapusTodo: function(todo) {
+          var index = this.todos.findIndex(function(t){
+            return t.id == todo.id;
+          });
+          this.todos.splice(index, 1);
+        },
+        toggleStatus: function(todo) {
+          var target = this.todos.find(function(t){
+            return t.id == todo.id
+          })
+          target.status = !target.status
+        }
       }
     });
   </script>
